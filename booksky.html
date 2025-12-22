@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BookSky</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: silver;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      color: Black;
+      text-align: center;
+      padding: 1rem;
+      font-size: 3.5rem;
+      font-weight: bold;
+      font-family: Popins;
+    }
+
+    #book-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .book-box {
+      background-color: black;
+      color: white;
+      padding: 1rem;
+      width: 270px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .book-box h2 {
+      color: red;
+      font-weight: bold;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .book-box .author {
+      color: red;
+      margin: 0.5rem 0;
+      font-size:1.1rem;
+      font-weight: italic;
+    }
+
+    .book-box .description {
+      font-size: 0.9rem;
+    }
+
+    .delete-btn {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      border-radius: 4px;
+    }
+
+    .add-circle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: lightcoral;
+      color: black;
+      font-size: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background-color: pink;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 250px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+
+    .popup input,
+    .popup textarea {
+      width: 100%;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .popup-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .popup-buttons button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>! BOOKSKY !</header>
+
+  <main id="book-container">
+    <!-- Default Book Box -->
+    <div class="book-box">
+      <h2>Rich Dad Poor Dad</h2>
+      <p class="author">Author: Richen</p>
+      <p class="description">
+        A tale of two fathers—one rich, one poor—teaching lessons on money, mindset, and financial independence.
+      </p>
+      <button class="delete-btn" onclick="deleteBox(this)">Delete</button>
+    </div>
+  </main>
+
+  <!-- Add Button -->
+  <div class="add-circle" onclick="togglePopup()">+</div>
+
+  <!-- Popup Form -->
+  <div class="popup" id="popup-form">
+    <input type="text" id="book-title" placeholder="Book Title" maxlength="50"/>
+    <input type="text" id="book-author" placeholder="Book Author" maxlength="50"/>
+    <textarea id="book-description" placeholder="Start Description...
+      (Max 50 words)" maxlength="300"></textarea>
+    <div class="popup-buttons">
+      <button onclick="addBook()">ADD</button>
+      <button onclick="togglePopup()">CANCEL</button>
+    </div>
+  </div>
+
+  <script>
+    function togglePopup() {
+      const popup = document.getElementById("popup-form");
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
+
+    function deleteBox(button) {
+      const box = button.parentElement;
+      box.remove();
+    }
+
+    function addBook() {
+      const title = document.getElementById("book-title").value.trim();
+      const author = document.getElementById("book-author").value.trim();
+      const description = document.getElementById("book-description").value.trim();
+
+      if (!title || !author || !description) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const box = document.createElement("div");
+      box.className = "book-box";
+
+      box.innerHTML = `
+        <h2>${title}</h2>
+        <p class="author">Author: ${author}</p>
+        <p class="description">${description}</p>
+        <button class="delete-btn" onclick="deleteBox(this)">Delete</button>
+      `;
+
+      document.getElementById("book-container").appendChild(box);
+
+      // Clear and close popup
+      document.getElementById("book-title").value = "";
+      document.getElementById("book-author").value = "";
+      document.getElementById("book-description").value = "";
+      togglePopup();
+    }
+  </script>
+</body>
+</html>
